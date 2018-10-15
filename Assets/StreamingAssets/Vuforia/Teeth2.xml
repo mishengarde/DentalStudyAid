@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QCARConfig>
+<Tracking>
+<ModelTarget name="Teeth2"/>
+</Tracking>
+
+<Assembly name="Teeth2s_assembly">
+<Part name="Teeth2" translation="0 0 0" rotation="AD: 0 0 1 0"/>
+<EntryPoint name="viewpoint_0000" translation="-0.00154797 0.00204437 0.153226" rotation="AD: 0.9652836555665523 0.3998335816727447 -0.9652836555665517 211.4">
+
+</EntryPoint>
+
+</Assembly>
+</QCARConfig>

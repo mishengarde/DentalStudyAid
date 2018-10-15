@@ -1,0 +1,23 @@
+# Blender MTL File: 'Tooth11.blend'
+# Material Count: 2
+
+newmtl mandibula:blinn1SG
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.920000 0.930000 0.940000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 6
+
+newmtl mandibula:lambert2SG
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.000000 0.000000 0.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 0.000000
+illum 6
+map_Kd /Users/mmun/Downloads/upper-teeths-dientes-permanentes-superiores/source/superior/bone-travertine_ne-11.jpg
