@@ -4,14 +4,25 @@ using UnityEngine;
 
 public class infomanager : MonoBehaviour
 {
+    public enum InfoMode
+    {
+        anatomyMode, prosMode, endoMode
+
+    }
+
+    public InfoMode infoMode;
 
     public GameObject anatomyInfo;
     public GameObject prosInfo;
     public GameObject endoInfo;
+    public GameObject teethParent;
+    public tooth[] teeth;
+    public GameObject paedsText;
 
     // Use this for initialization
     void Start()
     {
+        teeth = teethParent.GetComponentsInChildren<tooth>();
 
     }
 
@@ -26,16 +37,49 @@ public class infomanager : MonoBehaviour
             {
                 RaycastHit hit;
                 Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                //Create ray & cast out to distance of 200
-                if (Physics.Raycast(ray, out hit, 200))
+                //Create ray & cast out to distance of 1m
+                if (Physics.Raycast(ray, out hit, 1))
                 {
                     //if successful hit, check tag
-                    if (hit.transform.tag == "tooth33")
+                    if (hit.transform.tag == "tooth")
                     {
-                        Debug.Log("Touched!");
+                        hit.collider.GetComponent<tooth>().getHit(infoMode);
+
                     }
                 }
             }
+        }
+    }
+
+    public void changeModeToAnatomy()
+    {
+        infoMode = InfoMode.anatomyMode;
+        anatomyInfo.SetActive(true);
+        endoInfo.SetActive(false);
+        prosInfo.SetActive(false);
+    }
+
+    public void changeModeToEndo()
+    {
+        infoMode = InfoMode.endoMode;
+        anatomyInfo.SetActive(false);
+        endoInfo.SetActive(true);
+        prosInfo.SetActive(false);
+    }
+
+    public void changeModeToPros()
+    {
+        infoMode = InfoMode.prosMode;
+        anatomyInfo.SetActive(false);
+        endoInfo.SetActive(false);
+        prosInfo.SetActive(true);
+    }
+
+    public void changeModetoPaeds()
+    {
+        foreach (tooth T in teeth)
+        {
+            T.displayAgeOfEruption();
         }
     }
 }
