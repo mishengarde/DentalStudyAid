@@ -1,12 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class infomanager : MonoBehaviour
 {
     public enum InfoMode
     {
-        anatomyMode, prosMode, endoMode
+        anatomyMode, prosMode, endoMode, none
 
     }
 
@@ -15,36 +16,72 @@ public class infomanager : MonoBehaviour
     public GameObject anatomyInfo;
     public GameObject prosInfo;
     public GameObject endoInfo;
-    public GameObject teethParent;
+
+    public tooth currentTooth;
+
+    /*public GameObject teethParent;
     public tooth[] teeth;
-    public GameObject paedsText;
+    public GameObject paedsText;*/
 
     // Use this for initialization
     void Start()
     {
-        teeth = teethParent.GetComponentsInChildren<tooth>();
+        // teeth = teethParent.GetComponentsInChildren<tooth>();
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        //Detect touch for this frame
-        if (Input.touchCount > 0)
-        {
-            var touch = Input.GetTouch(0);
-            if (touch.phase == TouchPhase.Began)
-            {
-                RaycastHit hit;
-                Ray ray = Camera.main.ScreenPointToRay(touch.position);
-                //Create ray & cast out to distance of 1m
-                if (Physics.Raycast(ray, out hit, 1))
-                {
-                    //if successful hit, check tag
-                    if (hit.transform.tag == "tooth")
-                    {
-                        hit.collider.GetComponent<tooth>().getHit(infoMode);
 
+        //Detect touch for this frame
+        if (infoMode != InfoMode.none)
+        {
+            if (Input.touchCount > 0)
+            {
+
+
+                Debug.Log("Theres a touch!");
+
+                var touch = Input.GetTouch(0);
+                if (touch.phase == TouchPhase.Began)
+                {
+
+                    if (EventSystem.current.IsPointerOverGameObject(0) == false)
+                    {
+                        Debug.Log("The tap missed any UI elements");
+                        if (currentTooth != null)
+                        {
+                            currentTooth.closeInfo();
+                        }
+
+                    }
+                    else
+                    {
+                        Debug.Log("The tap hit a UI element {0}", EventSystem.current.currentSelectedGameObject);
+                    }
+
+                    Debug.Log("The touch just began!");
+
+                    Debug.DrawRay(Camera.main.ScreenToWorldPoint(touch.position), Camera.main.transform.forward, Color.blue, 1.0f);
+
+                    RaycastHit hit;
+                    Ray ray = Camera.main.ScreenPointToRay(touch.position);
+                    //Create ray & cast out to distance of 200m
+                    if (Physics.Raycast(ray, out hit, 200))
+                    {
+                        Debug.Log("The ray hit something!");
+
+                        //if successful hit, check tag
+                        if (hit.transform.tag == "tooth")
+                        {
+                            Debug.Log("It was a tooth - {0}", hit.collider.gameObject);
+
+                            currentTooth = hit.collider.GetComponent<tooth>();
+
+                            currentTooth.getHit(infoMode);
+
+                        }
                     }
                 }
             }
@@ -75,11 +112,19 @@ public class infomanager : MonoBehaviour
         prosInfo.SetActive(true);
     }
 
-    public void changeModetoPaeds()
+    public void tapMissedUIElements()
+    {
+        currentTooth.closeInfo();
+
+    }
+
+
+
+    /* public void changeModetoPaeds()
     {
         foreach (tooth T in teeth)
         {
             T.displayAgeOfEruption();
         }
-    }
+    } */
 }

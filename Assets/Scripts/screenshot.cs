@@ -1,31 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿// Saves screenshot as PNG file.
 using UnityEngine;
+using System.Collections;
+using System.IO;
 
-
-public class TakeScreenshot : MonoBehaviour
+public class screenshot : MonoBehaviour
 {
-    private int screenshotCount = 0;
 
-    // Check for screenshot key each frame
-    void Update()
+    public void UploadPNG()
     {
-        // take screenshot on touch
+        StartCoroutine(ActuallySave());
 
-        if (Input.touches.Length > 0)
+    }
+
+    public IEnumerator ActuallySave()
+    {
+        yield return new WaitForEndOfFrame();
+
+        // Create a texture the size of the screen, RGB24 format
+        int width = Screen.width;
+        int height = Screen.height;
+        Texture2D tex = new Texture2D(width, height, TextureFormat.RGB24, false);
+
+        // Read screen contents into the texture
+        tex.ReadPixels(new Rect(0, 0, width, height), 0, 0);
+        tex.Apply();
+
+        // Encode texture into PNG
+        byte[] bytes = tex.EncodeToPNG();
+        Object.Destroy(tex);
+
+        string filePath = Application.persistentDataPath + "/DenteractScreenshots";
+
+        if (File.Exists(filePath) == false)
         {
-            string screenshotFilename;
-            do
-            {
-                screenshotCount++;
-                screenshotFilename = "screenshot" + screenshotCount + ".png";
-
-            } while (System.IO.File.Exists(screenshotFilename));
-
-            //  audio.Play();
-
-            ScreenCapture.CaptureScreenshot(screenshotFilename);
+            Directory.CreateDirectory(filePath);
         }
 
+        // For testing purposes, also write to a file in the project folder
+
+        File.WriteAllBytes(filePath + "/SavedScreen.png", bytes);
     }
 }
