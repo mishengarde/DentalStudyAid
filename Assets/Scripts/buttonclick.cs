@@ -6,6 +6,7 @@ public class buttonclick : MonoBehaviour
 
     public AudioSource sound;
     private Rect audiorect;
+    bool soundToggle = true;
 
     void Start()
     {
@@ -26,4 +27,7 @@ public class buttonclick : MonoBehaviour
 
         }
     }
+
+
+
 }
